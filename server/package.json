@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
-    "lint": "eslint src/"
+    "lint": "eslint src/",
+    "test": "mocha --recursive --exit"
   },
   "author": "",
   "license": "ISC",
@@ -17,8 +18,10 @@
     "express": "^4.17.1",
     "express-basic-auth": "^1.2.0",
     "helmet": "^4.1.1",
+    "mocha": "^8.2.0",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.6",
-    "npm": "^6.14.8"
+    "npm": "^6.14.8",
+    "package.json": "^2.0.1"
   }
 }
