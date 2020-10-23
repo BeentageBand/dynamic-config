@@ -23,7 +23,9 @@ router.post('/', async (req, res, next) => {
 router.get('/:guid', async (req, res, next) =>{
     let {guid} = req.params;
     try {
-        const item = dal.findOne({'$loki': `guid`})
+        const item = dal.get(guid);
+        console.log(item.$loki);
+        
         if (undefined == item) res.json();
         else res.json(item);
 
@@ -32,19 +34,13 @@ router.get('/:guid', async (req, res, next) =>{
     }
 });
 
-router.post('/:guid', async (req, res, next) =>{
-    let {guid} = req.params;
-    try {
-        res.json(`post /${guid}`);
-    } catch (error) {
-        next(error);
-    }
-});
-
 router.get('/:guid/:keypath', async (req, res, next) => {
     let {keypath, guid} = req.params;
     try {
-        res.json(`post /${guid}/${keypath}`);
+        let item = dal.get(guid);
+        keypath.split('.')
+            .forEach((key) => item = item[key]);
+        res.json(item);
     } catch (error) {
         next(error);
     }
