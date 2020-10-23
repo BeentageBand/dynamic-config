@@ -21,7 +21,7 @@ router.post('/', async (req, res, next) => {
 });
 
 router.get('/:guid', async (req, res, next) =>{
-    let {guid} = req.params;
+    const {guid} = req.params;
     try {
         const item = dal.get(guid);
         console.log(item.$loki);
@@ -35,7 +35,7 @@ router.get('/:guid', async (req, res, next) =>{
 });
 
 router.get('/:guid/:keypath', async (req, res, next) => {
-    let {keypath, guid} = req.params;
+    const {keypath, guid} = req.params;
     try {
         let item = dal.get(guid);
         keypath.split('.')
