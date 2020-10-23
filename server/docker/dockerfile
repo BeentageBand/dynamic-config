@@ -1,0 +1,3 @@
+FROM node-express-dcs:latest
+COPY .. /app
+CMD ["npm", "start"]
