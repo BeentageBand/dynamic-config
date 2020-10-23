@@ -1,4 +1,4 @@
-const {Router} = require('express');
+const { Router } = require('express');
 const dal = require('../dal/dal');
 const router = Router();
 
@@ -9,6 +9,7 @@ router.post('/', async (req, res, next) => {
         const item = dal.insert(req.body);
         console.log(item);
 
+        res.status(201);
         res.json({
             guid: `${item['$loki']}`,
         });
@@ -20,12 +21,12 @@ router.post('/', async (req, res, next) => {
     }
 });
 
-router.get('/:guid', async (req, res, next) =>{
-    const {guid} = req.params;
+router.get('/:guid', async (req, res, next) => {
+    const { guid } = req.params;
     try {
         const item = dal.get(guid);
         console.log(item.$loki);
-        
+
         if (undefined == item) res.json();
         else res.json(item);
 
@@ -35,7 +36,7 @@ router.get('/:guid', async (req, res, next) =>{
 });
 
 router.get('/:guid/:keypath', async (req, res, next) => {
-    const {keypath, guid} = req.params;
+    const { keypath, guid } = req.params;
     try {
         let item = dal.get(guid);
         keypath.split('.')

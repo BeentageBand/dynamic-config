@@ -12,7 +12,7 @@ const errorHandler = (error, req, res, next) => {
     res.json({
         message: error.message,
         statck: process.env.NODE_ENV === 'production' ? 'stack' : error.stack,
-    }) ;
+    });
 }
 
 module.exports = {

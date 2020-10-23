@@ -31,4 +31,6 @@ app.use('/conf', dynamicConf);
 app.use(middlewares.notFound);
 app.use(middlewares.errorHandler);
 const port = process.env.PORT || 1337;
-app.listen(port, () => console.log(`Listening to port https://localhost:${port}`));
+const server = app.listen(port, () => console.log(`Listening to port https://localhost:${port}`));
+
+module.exports = server;
