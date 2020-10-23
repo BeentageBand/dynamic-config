@@ -1,11 +1,16 @@
 const {Router} = require('express');
+const dal = require('../dal/dal');
 const router = Router();
 
 router.post('/', async (req, res, next) => {
     try {
         console.log('Hit post /api/ with' + req.body);
+
+        const item = dal.insert(req.body);
+        console.log(item);
+
         res.json({
-            message: `post /api/conf ${req.body}`,
+            guid: `${item['$loki']}`,
         });
     } catch (error) {
         if ('ValidateError' === error.name) {
@@ -18,7 +23,10 @@ router.post('/', async (req, res, next) => {
 router.get('/:guid', async (req, res, next) =>{
     let {guid} = req.params;
     try {
-        res.json(`get /conf/${guid}`);
+        const item = dal.findOne({'$loki': `guid`})
+        if (undefined == item) res.json();
+        else res.json(item);
+
     } catch (error) {
         next(error);
     }

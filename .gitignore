@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Logs
 logs
 *.log
@@ -103,7 +102,3 @@ dist
 
 # TernJS port file
 .tern-port
-=======
-src/node_modules
-package-lock.*
->>>>>>> First commit with router and basic auth integrated
