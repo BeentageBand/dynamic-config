@@ -37,9 +37,7 @@ describe('Configuration API', () => {
         .post('/conf')
         .auth('admin', 'simplepass')
         .end((err, res) => {
-          res.should.have.status(404);
-          res.body.should.be.a('object');
-          res.body.should.have.property('guid').eq(1);
+          res.should.have.status(401);
           done();
         });
     });
@@ -52,7 +50,20 @@ describe('Configuration API', () => {
         .end((err, res) => {
           res.should.have.status(201);
           res.body.should.be.a('object');
-          res.body.should.have.property('guid').eq(1);
+          res.body.should.have.property('guid').eq('1');
+          done();
+        });
+    });
+
+    it('It should insert new conf with nested values and return guid', (done) => {
+      chai.request(server)
+        .post('/conf')
+        .auth('admin', 'simplepass')
+        .send({limits: { memory: 4098} })
+        .end((err, res) => {
+          res.should.have.status(201);
+          res.body.should.be.a('object');
+          res.body.should.have.property('guid').eq('2');
           done();
         });
     });
@@ -63,7 +74,7 @@ describe('Configuration API', () => {
   */
   describe('GET /conf/:guid', () => {
     it('It should return unauthorized if not authenticated', (done) => {
-      const guid = 1;
+      const guid = '1';
       chai.request(server)
         .get(`/conf/${guid}`)
         .end((err, res) => {
@@ -73,7 +84,7 @@ describe('Configuration API', () => {
     });
 
     it('It should return unauthorized if wrong pass/user', (done) => {
-      const guid = 1;
+      const guid = '1';
       chai.request(server)
         .get(`/conf/${guid}`)
         .auth('user', 'pass')
@@ -84,7 +95,7 @@ describe('Configuration API', () => {
     });
 
     it('It should return 404 when guid does not exist', (done) => {
-      const guid = 900;
+      const guid = '10';
       chai.request(server)
         .get(`/conf/${guid}`)
         .auth('admin', 'simplepass')
@@ -95,14 +106,14 @@ describe('Configuration API', () => {
     });
 
     it('It should respond with full body of guid', (done) => {
-      const guid = 1;
+      const guid = '1';
       chai.request(server)
         .get(`/conf/${guid}`)
         .auth('admin', 'simplepass')
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.a('object');
-          res.body.should.have.property('limits');
+          res.body.should.have.property('limit');
           done();
         });
     });
@@ -113,7 +124,7 @@ describe('Configuration API', () => {
    */
   describe('GET /conf/:guid/:keypath', () => {
     it('It should return unauthorized if not authenticated', (done) => {
-      const guid = 1;
+      const guid = '1';
       const keypath = 'limit';
       chai.request(server)
         .get(`/conf/${guid}/${keypath}`)
@@ -124,7 +135,7 @@ describe('Configuration API', () => {
     });
 
     it('It should return unauthorized if wrong pass/user', (done) => {
-      const guid = 1;
+      const guid = '1';
       const keypath = 'limit';
       chai.request(server)
         .get(`/conf/${guid}/${keypath}`)
@@ -136,35 +147,31 @@ describe('Configuration API', () => {
     });
 
     it('It should return 404 when keypath is not found in guid', (done) => {
-      const guid = 1;
-      const keypath = 'limit';
+      const guid = '1';
+      const keypath = 'limitmemory';
       chai.request(server)
         .get(`/conf/${guid}/${keypath}`)
         .auth('admin', 'simplepass')
         .end((err, res) => {
-          res.should.have.status(200);
-          res.body.should.be.a('object');
-          res.body.should.have.property('memory').eq(4098);
+          res.should.have.status(404);
           done();
         });
     });
 
     it('It should return 404 when guid is not found', (done) => {
-      const guid = 1;
+      const guid = '10';
       const keypath = 'limit';
       chai.request(server)
         .get(`/conf/${guid}/${keypath}`)
         .auth('admin', 'simplepass')
         .end((err, res) => {
-          res.should.have.status(200);
-          res.body.should.be.a('object');
-          res.body.should.have.property('memory').eq(4098);
+          res.should.have.status(404);
           done();
         });
     });
 
     it('It should respond with value on keypath', (done) => {
-      const guid = 1;
+      const guid = '1';
       const keypath = 'limit';
       chai.request(server)
         .get(`/conf/${guid}/${keypath}`)
@@ -172,7 +179,21 @@ describe('Configuration API', () => {
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.a('object');
-          res.body.should.have.property('memory').eq(4098);
+          res.body.should.have.property(keypath).eq(4098);
+          done();
+        });
+    });
+
+    it('It should respond with value on compound - join . - keypath', (done) => {
+      const guid = '2';
+      const keypath = 'limits.memory';
+      chai.request(server)
+        .get(`/conf/${guid}/${keypath}`)
+        .auth('admin', 'simplepass')
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a('object');
+          res.body.should.have.property(keypath).eq(4098);
           done();
         });
     });

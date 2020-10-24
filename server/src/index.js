@@ -21,7 +21,6 @@ app.use(express.json());
 app.use(authorizer);
 
 app.get('/', (req, res) => {
-    console.log(req.body);
     res.json({
         message: 'Route',
     })
@@ -30,6 +29,7 @@ app.get('/', (req, res) => {
 app.use('/conf', dynamicConf);
 app.use(middlewares.notFound);
 app.use(middlewares.errorHandler);
+
 const port = process.env.PORT || 1337;
 const server = app.listen(port, () => console.log(`Listening to port https://localhost:${port}`));
 

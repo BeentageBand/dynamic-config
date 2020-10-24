@@ -4,7 +4,6 @@ function getUnauthorizedResponse(req, res) {
     const errorMsg = req.auth
         ? `Credentials ${req.auth.user}:${req.auth.password} rejected.`
         : `No credentials provided`;
-    console.log(errorMsg)
     res.json({
         message: errorMsg
     });
