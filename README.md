@@ -21,6 +21,31 @@ Dynamic config service is live in https://ff-dcs.herokuapp.com/
 
 # Quick Start
 
+## Dependencies
+
+This project need node, npm, and docker to work.
+
+Check if the dependencies exist:
+```
+node -v
+nodejs -v
+npm -v
+docker -v
+```
+
+### Linux
+
+Use https://docs.docker.com/engine/install/ubuntu/
+```
+sudo apt install nodejs npm
+```
+
+### MacOS
+
+```
+brew install node docker
+```
+
 ## Set Up 
 
 On `workplace/ff-dcs/server`, run
@@ -73,7 +98,7 @@ On ff-dcs/, build deployment image:
 docker build -t ff-dcs .
 ```
 
-Then, push to Heroku
+Then, push to Heroku. Check heroku.com to install.
 
 ```
 heroku login
