@@ -37,7 +37,7 @@ describe('Configuration API', () => {
         .post('/conf')
         .auth('admin', 'simplepass')
         .end((err, res) => {
-          res.should.have.status(401);
+          res.should.have.status(400);
           done();
         });
     });
@@ -105,6 +105,18 @@ describe('Configuration API', () => {
         });
     });
 
+    it('It should return 400 when guid is non-numeric', (done) => {
+      const guid ="notanumber";
+      chai.request(server)
+        .get(`/conf/${guid}`)
+        .auth('admin', 'simplepass')
+        .end((err, res) => {
+          res.should.have.status(400);
+          done();
+        });
+    });
+
+
     it('It should respond with full body of guid', (done) => {
       const guid = '1';
       chai.request(server)
@@ -154,6 +166,18 @@ describe('Configuration API', () => {
         .auth('admin', 'simplepass')
         .end((err, res) => {
           res.should.have.status(404);
+          done();
+        });
+    });
+
+    it('It should return 400 when guid is non-numeric', (done) => {
+      const guid = 'notanumber';
+      const keypath = 'limit';
+      chai.request(server)
+        .get(`/conf/${guid}/${keypath}`)
+        .auth('admin', 'simplepass')
+        .end((err, res) => {
+          res.should.have.status(400);
           done();
         });
     });

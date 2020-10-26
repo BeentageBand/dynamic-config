@@ -20,6 +20,18 @@ const validateBodyNotEmpty = (body) => {
     }
 };
 
+const handleBadRequest = (res, error) => {
+    if ('NotFound' === error.name) {
+        res.status(404);
+    }
+    if ('TypeError' === error.name) {
+        res.status(400);
+    }
+    if ('BadRequest' === error.name) {
+        res.status(400);
+    }
+}
+
 router.post('/', async (req, res, next) => {
     try {
         validateBodyNotEmpty(req.body);
@@ -29,9 +41,7 @@ router.post('/', async (req, res, next) => {
             guid: `${item.$loki}`,
         });
     } catch (error) {
-        if ('BadRequest' === error.name) {
-            res.status(401);
-        }
+        handleBadRequest(res, error);
         next(error);
     }
 });
@@ -43,9 +53,7 @@ router.get('/:guid', async (req, res, next) => {
         validateItemFound(item, `Config ${guid} does not exist.`);
         res.json(item);
     } catch (error) {
-        if ('NotFound' === error.name) {
-            res.status(404);
-        }
+        handleBadRequest(res, error);
         next(error);
     }
 });
@@ -62,9 +70,7 @@ router.get('/:guid/:keypath', async (req, res, next) => {
             });
         res.json({[keypath]: item});
     } catch (error) {
-        if ('NotFound' === error.name) {
-            res.status(404);
-        }
+        handleBadRequest(res, error);
         next(error);
     }
 });
